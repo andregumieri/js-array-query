@@ -78,32 +78,37 @@ Data = {
 
 Group by year (ano in portuguese)
 ```bash
+var o = new ArrayQuery(Data.result);
 var group = o.group("info.extra.ano");
 console.log(group);
 ```
 
 Group by company
 ```bash
+var o = new ArrayQuery(Data.result);
 var group = o.group("company");
 console.log(group);
 ```
 
 Filter by gender: female
 ```bash
+var o = new ArrayQuery(Data.result);
 var filter = o.filter("gender", "female");
 console.log(filter);
 ```
 
 Filter by country (pais in portuguese): Brazil, Brasil, Cuba, Argentina 
 ```bash
+var o = new ArrayQuery(Data.result);
 var filter = o.filter("info.pais", /(Bra[sz]il|Cuba|Argentina)/i);
 console.log(filter);
 ```
 
 Filter and then group by age: 23 to 31
 ```bash
-var filter = o.filter("age", /2[3-9]|3[0-1]/);
-var oGroup = new ArrayQuery(filter);
-var group = oGroup.group("age");
+var of = new ArrayQuery(Data.result);
+var filter = of.filter("age", /2[3-9]|3[0-1]/);
+var og = new ArrayQuery(filter);
+var group = og.group("age");
 console.log(group);
 ```
