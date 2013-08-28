@@ -1,7 +1,7 @@
 js-array-query
 ==============
 
-Filter and group results of an array
+Filter and group array results
 
 
 How to use
