@@ -7,7 +7,7 @@ Filter and group array results
 How to use
 ----------
 
-```bash
+```javascript
 var o = new ArrayQuery(myArray);
 var grouped = o.group("key.to.group");
 var filtered = o.filter("key.to.filter", /(Values|to|get)/i);
@@ -16,7 +16,7 @@ var filtered = o.filter("key.to.filter", /(Values|to|get)/i);
 Samples
 -------
 Array model used in samples:
-```bash
+```javascript
 Data = {
 	...
 	result: [
@@ -77,35 +77,35 @@ Data = {
 ```
 
 Group by year (ano in portuguese)
-```bash
+```javascript
 var o = new ArrayQuery(Data.result);
 var group = o.group("info.extra.ano");
 console.log(group);
 ```
 
 Group by company
-```bash
+```javascript
 var o = new ArrayQuery(Data.result);
 var group = o.group("company");
 console.log(group);
 ```
 
 Filter by gender: female
-```bash
+```javascript
 var o = new ArrayQuery(Data.result);
 var filter = o.filter("gender", "female");
 console.log(filter);
 ```
 
 Filter by country (pais in portuguese): Brazil, Brasil, Cuba, Argentina 
-```bash
+```javascript
 var o = new ArrayQuery(Data.result);
 var filter = o.filter("info.pais", /(Bra[sz]il|Cuba|Argentina)/i);
 console.log(filter);
 ```
 
 Filter and then group by age: 23 to 31
-```bash
+```javascript
 var of = new ArrayQuery(Data.result);
 var filter = of.filter("age", /2[3-9]|3[0-1]/);
 var og = new ArrayQuery(filter);
