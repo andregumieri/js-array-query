@@ -7,10 +7,22 @@ Filter and group array results
 How to use
 ----------
 
+## Synchronous
 ```javascript
 var o = new ArrayQuery(myArray);
 var grouped = o.group("key.to.group");
 var filtered = o.filter("key.to.filter", /(Values|to|get)/i);
+```
+
+## Asynchronous
+```javascript
+var o = new ArrayQuery(myArray);
+o.group("key.to.group", function(grouped) {
+	console.log(grouped);
+});
+o.filter("key.to.filter", /(Values|to|get)/i, function(filtered) {
+	console.log(filtered);
+});
 ```
 
 Samples
@@ -76,11 +88,12 @@ Data = {
 }
 ```
 
-Group by year (ano in portuguese)
+Group by year (ano in portuguese) `async`
 ```javascript
 var o = new ArrayQuery(Data.result);
-var group = o.group("info.extra.ano");
-console.log(group);
+o.group("info.extra.ano", function(group) {
+	console.log(group);
+});
 ```
 
 Group by company
@@ -90,11 +103,12 @@ var group = o.group("company");
 console.log(group);
 ```
 
-Filter by gender: female
+Filter by gender: female `async`
 ```javascript
 var o = new ArrayQuery(Data.result);
-var filter = o.filter("gender", "female");
-console.log(filter);
+o.filter("gender", "female", function(filter) {
+	console.log(filter);
+});
 ```
 
 Filter by country (pais in portuguese): Brazil, Brasil, Cuba, Argentina 

@@ -1,5 +1,4 @@
 var ArrayQuery = function(array) {
-
 	/**
 	 * removeAcento
 	 */
@@ -29,12 +28,12 @@ var ArrayQuery = function(array) {
 	/**
 	 * filter
 	 */
-	var filter = function(by, value) {
+	var filter = function(by, value, callback) {
 		var newArray = [];
 		var navegacao = by.split(".");
 		var isRegex = (Object.prototype.toString.call(value).indexOf("RegEx")>=0) ? true : false;
 
-		array.map(function(item) {
+		var iteration = function(item) {
 			var itemValido = false;
 			var profundidade = 0;
 
@@ -62,70 +61,91 @@ var ArrayQuery = function(array) {
 			}(0, item);
 
 			if(itemValido) newArray.push(item);
-		});
-		return newArray;
+		}
+
+		if(callback && typeof callback=='function') {
+			window.setTimeout(function() {
+				array.map(iteration);	
+				callback.call(this, newArray);
+			}, 0);
+		} else {
+			array.map(iteration);
+			return newArray;
+		}
 	};
 
 
 	/**
 	 * group
 	 */
-	var group = function(by) {
+	var group = function(by, callback) {
 		var newArr = {};
-		array.map(function(item) {
-			var type = eval("typeof(item." + by+")");
-			var chaves = eval("item." + by);
-			
-			if(type!="object") {
-				chaves = [chaves];
-			}
-
-			for(var x in chaves) {
-				var chave = chaves[x];
-				if(typeof chave == 'function' || typeof chave == 'object') {
-					break;
-				}
-
-				if(newArr[chave] == undefined) {
-					newArr[chave] = [];
-				}
-
-				newArr[chave].push(item);
-			}
-		});
-
-		// Cria um array de chaves para ordenar
-		var Sortable = [];
-		for(var chave in newArr) {
-			if(typeof newArr[chave] != "object") {
-				break;	
-			}
-			Sortable.push(chave);
-		}
-
-		// Ordena as chaves
-		Sortable.sort(function(a, b) {
-			var newA = a.toLowerCase();
-			var newB = b.toLowerCase();
-			newA = removeAcento(newA);
-			newB = removeAcento(newB);
-
-			if (newA < newB) //sort string ascending
-				return -1 
-			if (newA > newB)
-				return 1
-			return 0
-		});
-
-		// Une as chaves e dados num novo array
 		var finalArr = {};
-		for(var i in Sortable) {
-			var chave = Sortable[i];
-			finalArr[chave] = newArr[chave];
-			newArr[chave] = null;
+
+		var doGroup = function() {
+			array.map(function(item) {
+				var type = eval("typeof(item." + by+")");
+				var chaves = eval("item." + by);
+				
+				if(type!="object") {
+					chaves = [chaves];
+				}
+
+				for(var x in chaves) {
+					var chave = chaves[x];
+					if(typeof chave == 'function' || typeof chave == 'object') {
+						break;
+					}
+
+					if(newArr[chave] == undefined) {
+						newArr[chave] = [];
+					}
+
+					newArr[chave].push(item);
+				}
+			});
+
+			// Cria um array de chaves para ordenar
+			var Sortable = [];
+			for(var chave in newArr) {
+				if(typeof newArr[chave] != "object") {
+					break;	
+				}
+				Sortable.push(chave);
+			}
+
+			// Ordena as chaves
+			Sortable.sort(function(a, b) {
+				var newA = a.toLowerCase();
+				var newB = b.toLowerCase();
+				newA = removeAcento(newA);
+				newB = removeAcento(newB);
+
+				if (newA < newB) //sort string ascending
+					return -1 
+				if (newA > newB)
+					return 1
+				return 0
+			});
+
+			// Une as chaves e dados num novo array
+			for(var i in Sortable) {
+				var chave = Sortable[i];
+				finalArr[chave] = newArr[chave];
+				newArr[chave] = null;
+			}
 		}
 
-		return finalArr;
+
+		if(callback && typeof callback=='function') {
+			window.setTimeout(function() {
+				doGroup();
+				callback.call(this, finalArr);
+			}, 0);
+		} else {
+			doGroup();
+			return finalArr;
+		}		
 	};
 
 	return {
