@@ -7,14 +7,14 @@ Filter and group array results
 How to use
 ----------
 
-## Synchronous
+**Synchronously**
 ```javascript
 var o = new ArrayQuery(myArray);
 var grouped = o.group("key.to.group");
 var filtered = o.filter("key.to.filter", /(Values|to|get)/i);
 ```
 
-## Asynchronous
+**Asynchronously**
 ```javascript
 var o = new ArrayQuery(myArray);
 o.group("key.to.group", function(grouped) {
